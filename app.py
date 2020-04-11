@@ -27,7 +27,6 @@ app.config['MYSQL_DB'] = 'dsp'
 
 mysql = MySQL(app)
 
-
 # The route for the home page. This block of code handles all home-page related operations.
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -45,8 +44,6 @@ def login():
         cur.execute("SELECT * FROM authentication WHERE user_id =  '{0}' AND "
         "password = '{1}'".format(username, hash_password(password)))
         result = cur.fetchall()
-        print(len(result))
-        print(hash_password(password))
         if len(result) == 1:
             cur.execute("select * from student")
             result = cur.fetchall()
@@ -74,7 +71,6 @@ def register():
         department = request.form.get("dpt", False)
         cur = mysql.connection.cursor()
         cur.execute("insert into authentication values('{0}', '{1}')".format(firstname[0:1]+lastname, hash_password(password)))
-        print(hash_password(password))
         cur.execute("insert into student(ssn, first_name, last_name, birth_date, email_id, department_id) values('{0}','{1}','{2}','{3}','{4}','{5}')".format(maskSSN(ssn), firstname, lastname, dob, email, department))
         result = cur.fetchall()
         mysql.connection.commit()
